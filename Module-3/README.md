@@ -1,48 +1,68 @@
-### Module 3 - Static Analysis
+# [Módulo 3] Análise Estática
 
-So far you've learned how to configure your computer and device with the necessary tools to decrypt iOS apps and copy them to your computer. In this module you'll learn how to analyze an iOS application by inspecting all its files, frameworks (dependencies) and lastly the application binary. It's called `static analysis` because you're not going to execute the binary, you'll be reviewing all the files contained in the `.ipa` archive. This is intended to be an interactive module, meaning I'll point you in the _hopefully_ right direction and you are going to find the issues yourself. But don't worry, if you feel lost or cannot find any issues, all the solutions are at the end of the module (along with explanations on _why they are considered issues_ and some _recommended solutions_).
+Até agora, você aprendeu a configurar seu computador e dispositivo móvel com as ferramentas necessárias para descriptografar aplicativos iOS e copiá-los para seu computador. Agora você aprenderá a analisar um aplicativo iOS inspecionando todos os seus arquivos, frameworks (dependências) e até o binário. O nome desse módulo é `Análise Estática` porque vamos analisar o aplicativo estaticamente, sem executá-lo. 
 
-After you decrypt an iOS application you'll end up with a `.ipa` file. This is an application archive, basically a zip archive. It includes the application binary, 3rd-party frameworks, configuration files, media files (like images and videos), UI elements (like [storyboards](https://developer.apple.com/library/archive/documentation/ToolsLanguages/Conceptual/Xcode_Overview/DesigningwithStoryboards.html) and [nibs](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html)), custom fonts and any other file the developers embed within the application.
+Este é um módulo interativo, o que significa que os passos o colocarão na direção certa e você mesmo encontrará os problemas. Mas não se preocupe, se você se sentir perdido ou não conseguir encontrar nenhum problema, todas as soluções estão no final do módulo (juntamente com explicações sobre _por que eles são considerados problemas_ e algumas _soluções recomendadas_).
 
-To illustrate the most common vulnerabilities in iOS applications I've created a very insecure application called `CoinZa`[^1], I wrote it in `Objective-C` (aka Objc) to make it simpler to explain some reversing steps. Applications written in `Swift` still prove a bit difficult for some tools, though I plan to add support to some modules for `Swift` applications in the future. For now you can download the Objc version form [here](https://github.com/ivRodriguezCA/RE-iOS-Apps-Extras-Github/tree/master/Files).
+Depois de descriptografar um aplicativo iOS, você ficará com um arquivo do tipo `.ipa`. Esse arquivo é basicamente um arquivo `.zip` com a extensão trocada. Isso significa que ele inclui o binário da sua aplicação, todos os frameworks de terceiros que ela incorpora, arquivos de configurações, arquivos de mídia como imagens e vídeos, elementos de UI como [storyboards](https://developer.apple.com/library/archive/documentation/ToolsLanguages/Conceptual/Xcode_Overview/DesigningwithStoryboards.html) e [nibs](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/LoadingResources/CocoaNibs/CocoaNibs.html), fontes customizadas e quaisquer outras coisas que os desenvolvedores puseram lá.
 
-#### Extracting the application files
-- Extracting the `.ipa` contents is as simple as changing its extension to `.zip` and unzipping it.
+Para ilustrar as vulnerabilidades mais comuns, [@ivRodriguezCA](https://twitter.com/ivRodriguezCA) criou um aplicativo iOS inseguro chamado [`CoinZa`](../CoinZa.ipa). O `CoinZa` é escrito em Objective-C, o que torna mais simples a exploração - o que significa que aplicativos escritos em Swift são mais difíceis de serem explorados.
+
+## O que você vai precisar nesse módulo?
+* um computador (de preferência, um MacBook)
+* o ipa do aplicativo CoinZa ([download](../CoinZa.ipa))
+* class-dump e um ARM Disassembler
+
+**Execute cada um dos passos abaixo com o aplicativo `CoinZa` e anote o que encontrou para depois comparat com as soluções.**
+
+## Extração de arquivos
+A extração do conteúdo de um `.ipa` é tão simples quando trocar sua extensão para `.zip` e descompactar ele. Você pode fazer isso manualmente, mas se quiser usar o terminal seria algo como
+
 ```bash
 mv CoinZa.ipa CoinZa.zip
 unzip CoinZa.zip
 ```
-- After unzipping the contents you'll have a folder named `Payload` and inside you'll find the application bundle named `CoinZa.app`. _Note: On an application downloaded from the App Store you'll find 2 more files along with the `Payload` folder, a `iTunesArtwork` file which is the app icon and a `iTunesMetadata.plist` file that contains information like the developer's name and ID, the bundle identifier, copyrights, the name of the application, your email and the date you purchased it, among other information._
-- Right-click (or Control ⌃ + Left-click) the `CoinZa.app` and select `Show Package Contents`.
-- Finally, move all the files within the `.app` bundle to a new folder. This is to have an easier access to them, instead of right-clicking it and selecting `Show Package Contents` all the time.
+
+Depois de descompactar o `zip`, o conteúdo dele ficará num arquivo chamado `CoinZa.app` dentro da pasta `Payload`. Clicar com o botão direito no `CoinZa.app` fará aparecer uma mensagem de `Show Package Contents` (ou `Mostrar Conteúdo do Pacote`). Com isso, você terá acesso a todos os arquivos citados anteriormente e poderá até copiá-los para um local que possa ser acessado mais facilmente.
+
+## Análise dos arquivos embutidos
+Nosso objetivo final é entender o máximo possível o que os desenvolvedores estão enviando junto com cada um dos seus apps. É uma boa ideia começar procurando por problemas clássicos, coisas que **não deveriam estar ali**. No iOS, esses problemas são tipicamente arquivos de configuração, arquivos de dados de exemplo, arquivos de conexão com banco de dados ou até arquivos de chaves privadas pra conexões SSH. E sim, todos eles acontecem no mundo real!
+
+### Arquivos `.plist`
+Os arquivos `Info.plist` e outros arquivos com extensão `.plist` estão disponíveis em todos os aplicativos da App Store. Arquivos `.plist` podem guardar muitas informações sobre o aplicativo, em especial o `Info.plis` que carrega informações de configuração como:
+- Se o app habilita conexões inseguras, desabilitando as proteções da política de App Transport Security (ATS). Isso por ser visto por meio da chave [`NSAppTransportSecurity`](https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity).
+- Se o app aceita [`Scheme URLs`](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) customizadas e quais são elas. Isso pode ser visto procurando a chave `CFBundleURLTypes`.
+
+
+### Arquivos `.mom` e `.momd` 
+Essas extensões se referem a modelos de CoreData compilados. Esses arquivos podem ser decompilados usando a ferramenta citada no [módulo 1](../Module-1/README.md): `momodec`.
+
+### Outros arquivos
+Além dos dois citados acima, outros arquivos também podem ser ferramentas interessantes nessa análise: 
+- Arquivos `.json` são comuns para armazenar chaves privadas e outras informações de configuração
+- Arquivos `.txt` também podem servir de local para armazenamento de informações de configuração e até recursos do app que deveriam ser protegidos por uma assinatura, por exemplo
+- Arquivos de `mídia` também podem ser recursos especiais que não deveriam estar disponíveis localmente na aplicação
+
+## Análise de frameworks de terceiros (dependências)
+A maioria absoluta dos aplicativos iOS usam pelo menos um framework de terceiro. Muitos usam centenas deles! Isso merece uma atenção especial porque aumenta muito a superfície de ataque, principalmente quando desenvolvedores esquecem de atualizar suas dependências por falta de gerenciamento adequado. Muitas vezes, se o app está funcionando bem, não se tem um incentivo para essas atualizações, mesmo que isso possa representar vulnerabilidades de segurança. 
+
+As dependências de um aplicativo podem ser encontradas na pasta `Frameworks`. Fique sempre atento às bibliotecas e às suas versões presentes nos seus respectivos `Info.plist`. **Vale sempre a pena procurar no Google quais as vulnerabilidades conhecidas para aquela biblioteca naquela versão específica.**
+
+## Recuperar as classes da aplicação
+Uma parte essencial da análise estática de qualquer aplicativo é reunir informações sobre que métodos e classes estão contidos ali. Esse passo pode fornecer muitas informações porque a declaração de métodos muito descritivos é um dos pontos principais de uma boa engenharia de software. Por outro lado, esses nomes também podem dar uma ótima ideia para um atacante das features que a aplicação possui. Há uma boa forma de evitar dar informações para atacantes ao mesmo tempo que mantém uma boa engenharia de software no seu projeto: [ofuscando o código](https://github.com/rockbruno/swiftshield).
+
+Em aplicativos ofuscados o resultado dessa etapa pode ser apenas um monte de strings aleatórias. Entretanto, não são todos os apps que mantém uma ofuscação e, por isso, é sempre importante passar por aqui. Para isso, o `class-dump` falado no [módulo 1](../Module-1/README.md) será usado. 
+
+Navegue até a pasta onde está o binário executável do `class-dump` e forneça o endereço do binário do aplicativo `CoinZa`. Grave o resultado num arquivo `.txt` para analisar melhor depois.
+
 ```bash
-mkdir CoinZaFiles
-mv Payload/CoinZa.app/* CoinZaFiles/
+cd path/to/class-dump
+./class-dump path/to/Payload/CoinZa.app/CoinZa > dump.txt
 ```
 
-#### Analyzing embedded files
-Your end goal is to understand as much as possible what the developers are shipping with every application. It's a good idea to start by looking for _low-hanging fruit_ kind of issues. In iOS reversing these come as configuration files, example data files, database connection files or embedded private keys for SSH connections. Yes, as I've said before, I've seen all of these cases in real applications.
-- The two most common configuration files I've encountered in iOS applications are `.plist` and `.json`. Start your research by reading through all the files you can find with these extensions and see if you can find some information that **should not be there**.
-- A very important file is the `Info.plist` in the root directory of an iOS application. This file contains a lot of configuration data like if the application _enables_ weak TLS settings on some domains (search for the `NSAppTransportSecurity` key), or if the application accepts custom [`Scheme URLs`](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) (search for the `CFBundleURLTypes` key).
-- Compiled CoreData models (`.mom`, `.momd`) can be decompiled into `xcdatamodel` files using tool called `momdec`. These files can later be inspected in Xcode.
+O aplicativo `dump.txt` gerado deve conter uma lista enorme de métodos e classes. Procure por classes interessantes e tente advinhar sobre o que é essa aplicação.
 
-#### Analyzing 3rd party frameworks
-Almost every single iOS application uses at least one 3rd party framework. As a security researcher this is very important because this increases the attack surface and more often than not the developers forget to update their dependencies and the bigger the list of dependencies, the harder it is to keep track of updated versions. This means that as long as an application "still works" there's no incentive to update these 3rd party frameworks. This leaves users with outdated, and potentially vulnerable, code on their devices. All the 3rd party framework within an iOS bundle live in a folder called `Frameworks`.
-- Open the `Frameworks` folder, take a look at which frameworks `CoinZa` is using and pay attention to the frameworks' versions.
-- **Tip 1:** The framework's version is disclosed in its `info.plist` file.
-- **Tip 2:** Google those framework versions and search for known vulnerabilities.
-
-#### Dumping the application classes
-An essential part of the static analysis of any application is to gather information about what methods and classes are contained in the application. This step gives you very important information because, as many developers know, declaring very descriptive methods help the development of good products. Thus the names of some of the methods will give an insight of what the application features are. I'll show you how to use `class-dump-z` to dump the application's classes and methods. There's not going to be an exercise for this section, but you can then spend some time reading through the output and taking notes on interesting classes or methods.
-- Dumping the classes is extremely easy with `class-dump-z`, navigate to the folder where you extracted the `CoinZa.app` files and run `class-dump-z` with the binary name as its first parameter and save the ouput on a `dump.txt` file:
-    ```bash
-    cd ~/Downloads/CoinZaFiles
-    class-dump-z CoinZa > dump.txt
-    ```
-- If you open the `dump.txt` file, you have now all the classes, methods and some instance variable names of the application binary. As you can see there are some interesting classes like `Wallet`, `KeyPair`, `AddFundsViewController`, `CreateWalletViewController`. Even without installing the application we can see that this _probably_ is a cryptocurrency application.
-- Finally, if you run `class-dump-z` with no parameters it will show you all the options it has for dumping classes.
-
-#### Disassembling and decompiling the binary - Hopper
+## Desmontando e decompilando [Hopper]
 After the initial reconnaissance work, you've reached (IMO) the most exciting part of this module, understanding the actual behaviour of the application methods. After searching through the classes and methods in the `class-dump-z` output, you could see that this application is very small; but most of the applications are significantly bigger and have far more classes and methods. Because of this, it's important that you can prioritize your work and focus on the more interesting cases.
 - To disassemble and decompile the binary open Hopper and drag-n-drop the CoinZa binary in Hopper's active window. _Note: You'll see that this binary is a [`FAT` binary](https://en.wikipedia.org/wiki/Fat_binary), which means that it contains code for more than one architecture. In this case it contains code for the `ARMv7` and `ARM64` architectures because this application targets a minimum version of iOS 10 and the minimum supported devices on iOS 10 are the iPhone 5, iPod Touch 6th Gen and iPad 4th Gen, which are `ARMv7` devices._
 
@@ -96,51 +116,12 @@ After the initial reconnaissance work, you've reached (IMO) the most exciting pa
 - **Tip 1:** Ignore all classes with the `FIR` prefix, they are part of the Firebase framework and are outside of the scope of this analysis.
 - **Tip 2:** If you are using the trial version of `Hopper` take into account that it will self-close every 30min.
 
-#### Disassembling and decompiling the binary - Ghidra
-On March 5th, 2019 the [NSA released](https://ghidra-sre.org/) a free and open source reversing tool called [`Ghidra`](https://en.wikipedia.org/wiki/Ghidra). `Ghidra` supports Windows, Linux and macOS. Even though it's a very new tool and I haven't been using it as long as Hopper, I wanted to add it to the course so that we all could learn from it. _Note: Like I said, I haven't used `Ghidra` much so please bear with me while I show you how to use it._
-- You can launch Ghidra by running the `ghidraRun` bash script at the root of the `ghidra_9.0.1/` directory. _Note: `Ghidra` requires the Java JDK, if you don't have it on your machine you can download it from [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)._
-```bash
-./ghidraRun
-```
-- If this is the first time you're running `Ghidra` you'll have to create a project. Click on `File` and then `New Project...` (or `⌘ + N`).
-- Choose if you want a `Shared` or `Non-Shared` project. `Shared` project can be accessed by other users.
-- Select a directory to save your project and give it a name.
-- Drag-n-drop the `CoinZa` binary into `Ghidra`.
-- `Ghidra` will display a dialog saying that the file contains nested files.This is the same as Hopper telling you that it was a `FAT` binary and you need to choose an architecture. Select the `Batch` option.
-- You'll be presented with a window showing you the two architectures in the  binary. `AARCH64:LE:64:v8A` is `ARM64` and `ARM:LE:32:v8` is `ARMv7`. You can keep both selected, but since they are the same I'd suggest to just keep one selected.
-- `Ghidra` will show a toast saying the file was _imported_. Super fast eh? Not so fast, _imported_ doesn't mean disassembled.
-- Expand your project folder and the `CoinZa` folder and you'll see a file called either `ARM-32-cpu0x9` or `AARCH64-64-cpu0x0` depending on the file you previously selected.
-- Drag-n-drop the `ARM-32-cpu0x9`/`AARCH64-64-cpu0x0` file on top of the `CodeBrowser` button (the one with the dragon icon).
-- `Ghidra` will tell you that the file hasn't been analyzed and if you want to do it. Click `Yes`.
-- Leave the default selected Analyzers selected and click `Analyze`. _Note: To be honest I haven't played around too much with `Ghidra` to know the different analyzers, that's why I suggested to leave the defaults._
-- In my computer `Ghidra` took significantly longer than `Hopper`.
-- On the `Symbol Tree` window (on the far left) select `Classes` and scroll down to `Wallet` and select the `WalletDetailViewController` class.
-- Within the `WalletDetailViewController` functions search, again, for `didUpdateWalletBalance`.
-- On the `Decompiler` window (on right side of the split windows) you'll see the decompiled code of the method. _Note: If you don't see the `Decompiler` window press `⌘ + E`._
-```c
-_objc_msgSend(&OBJC_CLASS__NSUserDefaults,"standardUserDefaults");
-uVar2 = objc_retainAutoreleasedReturnValue();
-iVar1 = objc_msgSend(uVar2,"boolForKey:",&cf_isProVersion);
-if (iVar1 == 0) {
-  _objc_msgSend(&OBJC_CLASS__NSString,"stringWithFormat:",
-                &cf_Fundspurchasedsuccessfully,yourbalancewillincreasebyUS$%f.);
-} else {
-  _objc_msgSend(&OBJC_CLASS__NSString,"stringWithFormat:",
-                &
-                cf_Sinceyouareaprouserweaddedanextra20%%andit'sonus!YourbalancewillactuallyincreasebyUS$%f.
-               );
-}
-```
-- As you can see this looks very similar to what `Hopper` showed on its `pseudo-code` mode.
-- A huge advantage is that `Ghidra` is free!
 
-![Hopper Pseudo-code Mode](https://github.com/ivRodriguezCA/RE-iOS-Apps-Extras-Github/blob/master/Module-3/ghidra1.png?raw=true)
-
-#### Conclusions
+## Conclusões
 - A static analysis on an iOS application can take you as little or as long as you want. You can go as deep as you can. Specially because the same techniques used to inspect the main application binary can be used to reverse engineer the 3rd party frameworks' binaries. I personally spend many days, and sometimes even many weeks, performing static analysis on iOS applications. _Note: The first mobile bug I was ever rewarded for on [HackerOne](https://hackerone.com) was a weak encryption vulnerability, specifically an insecure encryption key generation, basically I was able to predict past and future encryption keys. This was possible because I spent a lot of time understanding their key generation algorithm and was finally able to understand its behaviour without even running the application, all via static analysis._
 - Many developers don't realize that any file they embed in their application will be very easy to extract and analyze.
 - As researchers is very good idea to check the 3rd party frameworks bundled with the application.
 - Gather as much information as you can on this step because you'll use it in the dynamic analysis step.
 
-#### Solutions
+## Soluções
 Find the solutions [here](Solutions.md).

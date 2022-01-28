@@ -1,21 +1,28 @@
-### Introduction
+# Introdução
 
-My interest in application security started when the company I was working for had a contract to build a new app with exclusive features protected behind a login screen and someone downloaded this app from the App Store, reverse engineered it and published a list of its features, including screenshots and text that our entire engineering team thought were protected by the login screen. I had to know _how_ they did that.
+Este curso destina-se a ajudar qualquer pessoa que queira começar a aprender sobre segurança em aplicativos iOS, entendendo o básico de manipulação em tempo de execução e _binary patching_. Como o público-alvo é de iniciantes e _talvez_ pesquisadores intermediários/desenvolvedores/engenheiros/etc, não há pré-requisitos obrigatórios. No lugar disso, segue uma lista de _nice-to-have_ (é-bom-ter) ou conceitos recomendados e ferramentas que podem ajudar a navegar mais facilmente pelos próximos módulos:   
 
-At this point in my career I had been working on iOS development for over 6 years, this helped me enter the application security field with an fairly robust understanding of the inner-workings of iOS apps, it was _"just"_ a matter of learning how to protect my applications. But to learn how to protect them, I had to learn how to break them first!
+## Conceitos
+* Conhecimento básico em [SSH](https://en.wikipedia.org/wiki/Secure_Shell)
+* Entendimento básico de [Objective-C](https://en.wikipedia.org/wiki/Objective-C) e [Swift](https://en.wikipedia.org/wiki/Swift_programming_language)
+* Conhecimento básico em [Javascript](https://en.wikipedia.org/wiki/JavaScript)
+* Conhecimento básico em [HTML](https://en.wikipedia.org/wiki/HTML)
+* Entendimento básico de ataques [Man-in-the-Middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack)
 
-This course is my way of sharing with the community everything I've learned in the past few years of me doing this research full-time. It's intended to help new security enthusiasts explore the exciting world of reversing iOS apps and hopefully help iOS developers create better and more secure applications.
+## Ferramentas
+* **Um computador, idealmente um MacBook:** todo o material abordado aqui foi criado usando um MacBook, mas quase todas as ferramentas utilizadas possuem uma versão Windows ou alternativa, exceto Xcode
+* **Cabo Lightning:** um cabo para conectar seu iPhone ao seu computador. Evite usar cabos Lightning para USB-C, especialmente os que vêm nas caixas do iPhone's, [porque já foram detectados problemas na utilização desse tipo de cabo para execução de jailbreak, por exemplo](https://twitter.com/checkra1n/status/1195452064958222337). Procure usar cabos Lightning para USB-A ou cabos de terceiros.
+* **iPhone com jailbreak:** para dispositivos com processador A11 ou anteriores (no caso, iPhone X ou anteriores), é fortemente recomendado o uso do [checkra1n](https://checkra.in), independente da versão do iOS. Caso contrário, dê uma olhada nas opções oferecidas pelo [unc0ver](https://unc0ver.dev/).
 
-#### What WON'T be covered in this course
+### Mais importante de tudo, curiosidade!
 
-- How to jailbreak your device.
-- iOS (the operating system) exploitation.
-- Tweak development for jailbroken devices.
-- Mobile backend API hacking.
-- In-depth understanding of ARM assembly.
+---
+Além disso, para manter as expectativas em ordem, aqui vai uma lista do que não será coberto por esse curso (pelo menos não nessa ou em uma versão próxima, mas talvez num futuro mais distante).
 
-Just wanted to set the right expectations, this course is basically for everyone that's new to iOS application security and ARM binary reversing.
+## O que NÃO vai ser coberto por esse curso
+- Exploração do iOS (o sistema operacional)
+- Exploração do backend de aplicativos mobile
+- Entendimento profundo sobre assembly ARM 
 
-If you're still interested, join me in learning how to reverse iOS applications!
-
-_Note: Don't worry if you don't have a jailbroken device, you'll only need it for [Module 2](Module-2/README.md). You can skip this module an come back to it once you get your hands on a jailbroken device._
+## Nota
+Não se preocupe se você não tiver um dispositivo com jailbreak em mãos. Ainda assim, há muita coisa que você pode aprender nesse curso. O que não for possível, pode pular e voltar depois 

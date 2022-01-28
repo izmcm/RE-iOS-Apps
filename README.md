@@ -1,52 +1,42 @@
-# Reverse Engineering iOS Applications
+# Segurança em Aplicativos iOS
 
-Welcome to my course `Reverse Engineering iOS Applications`. If you're here it means that you share my interest for application security and exploitation on iOS. _Or maybe you just clicked the wrong link_ 😂
+### **Esta é uma versão traduzida e atualizada/modificada do curso de [engenharia reversa em aplicativos iOS](https://github.com/ivRodriguezCA/RE-iOS-Apps) criado originalmente por [@ivRodriguezCA](https://twitter.com/ivRodriguezCA).**
 
-All the vulnerabilities that I'll show you here are real, they've been found in production applications by security researchers, including myself, as part of bug bounty programs or just regular research. One of the reasons why you don't often see writeups with these types of vulnerabilities is because most of the companies prohibit the publication of such content. We've helped these companies by reporting them these issues and we've been rewarded with bounties for that, but no one other than the researcher(s) and the company's engineering team will learn from those experiences. This is part of the reason I decided to create this course, by creating a fake iOS application that contains _all_ the vulnerabilities I've encountered in my own research or in the very few publications from other researchers. Even though there are already some projects[^1] aimed to teach you common issues on iOS applications, I felt like we needed one that showed the kind of vulnerabilities we've seen on applications downloaded from the App Store.
+A tradução do README original está disponível [aqui](README-original.md).
 
-This course is divided in 5 modules that will take you from zero to reversing production applications on the Apple App Store. Every module is intended to explain a single part of the process in a series of step-by-step instructions that should guide you all the way to success.
+O curso original ainda está disponível integralmente no [Github](https://github.com/ivRodriguezCA/RE-iOS-Apps). Essa versão foi traduzida do original para português brasileiro e sofreu uma série de modificações. Entre elas, a reoganização do material, a reescrita de determinadas partes para melhor clareza, a inclusão de novos tutoriais e a atualização dos assuntos e ferramentas para adequação às versões mais recentes do iOS. 
 
-This is my first attempt to creating an online course so bear with me if it's not the best. I love feedback and even if you absolutely hate it, let me know; but hopefully you'll enjoy this ride and you'll get to learn something new. Yes, I'm a n00b!
+Todos os módulos aqui descritos foram atualizados seguindo testes realizados no iOS 14.6.
 
-If you find typos, mistakes or plain wrong concepts please be kind and tell me so that I can fix them and we all get to learn!
+* [x] Tradução para PT-BR
+* [x] Atualização dos módulos, ferramentas e conceitos
+* [ ] Uso do Theos para criação de Tweaks
+* [ ] Versão Swift
 
-### Version: 1.1
+## Módulos
 
-### Modules
-
-- [Prerequisites](Prerequisites.md)
-- [Introduction](Introduction.md)
-- [Module 1 - Environment Setup](/Module-1/README.md)
-- [Module 2 - Decrypting iOS Applications](/Module-2/README.md)
-- [Module 3 - Static Analysis](/Module-3/README.md)
-- [Module 4 - Dynamic Analysis and Hacking](/Module-4/README.md)
+- [Introdução](Introduction.md)
+- [[Módulo 1] Setup do Ambiente](/Module-1/README.md)
+- [[Módulo 2] Descriptografando Aplicativos iOS](/Module-2/README.md)
+- [[Módulo 3] Análise Estática](/Module-3/README.md)
+- [Module 4 - Análise Dinâmica e Hacking](/Module-4/README.md)
 - [Module 5 - Binary Patching](/Module-5/README.md)
-- [Final Thoughts](Final-Thoughts.md)
-- [Resources](Resources.md)
+- [Pensamentos finais](Final-Thoughts.md)
+- [Recursos](Resources.md)
 
-### EPUB Download
-Thanks to [natalia-osa](https://github.com/natalia-osa)'s brilliant [idea](https://github.com/ivRodriguezCA/RE-iOS-Apps/issues/7), there's now a `.epub` version of the course that you can download from [here](https://github.com/ivRodriguezCA/RE-iOS-Apps-Extras-Github/blob/master/Files/RE-iOS-Applications-v1.1.epub). As Natalia mentioned, this is for easier consumption of the content. Thanks again for this fantastic idea, Natalia 🙏🏼.
 
-### License
+## Licença
 
 Copyright 2019 Ivan Rodriguez `<ios [at] ivrodriguez.com>`
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+É concedida permissão, gratuitamente, a qualquer pessoa que obtenha uma cópia deste software e dos arquivos de documentação associados (o "Software"), para lidar com o Software sem restrições, incluindo, sem limitação, os direitos de usar, copiar, modificar, mesclar, publicar, distribuir, sublicenciar e/ou vender cópias do Software e permitir que as pessoas a quem o Software é fornecido o façam, sujeito às seguintes condições:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+O aviso de direitos autorais acima e este aviso de permissão devem ser incluídos em todas as cópias ou partes substanciais do Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+O SOFTWARE É FORNECIDO "COMO ESTÁ", SEM GARANTIA DE QUALQUER TIPO, EXPRESSA OU IMPLÍCITA, INCLUINDO MAS NÃO LIMITADO ÀS GARANTIAS DE COMERCIALIZAÇÃO, ADEQUAÇÃO A UM DETERMINADO FIM E NÃO VIOLAÇÃO. EM NENHUMA CIRCUNSTÂNCIA OS AUTORES OU DETENTORES DE DIREITOS AUTORAIS SERÃO RESPONSÁVEIS POR QUALQUER REIVINDICAÇÃO, DANOS OU OUTRA RESPONSABILIDADE, SEJA EM UMA AÇÃO DE CONTRATO, ATO ILÍCITO OU DE OUTRA FORMA, DECORRENTE DE, DE OU EM CONEXÃO COM O SOFTWARE OU O USO OU OUTRAS NEGOCIAÇÕES NO PROGRAMAS.
 
-### Donations
-I don't really accept donations because I do this to share what I learn with the community. If you want to support me just re-share this content and help reach more people. I also have an online store ([nullswag.com](https://nullswag.com)) with cool clothing thingies if you want to get something there.
+## Insenção de Danos
+O uso deste curso ou material é, em todos os momentos, "por sua conta e risco". Se você estiver insatisfeito com qualquer aspecto do curso, qualquer um destes termos e condições ou quaisquer outras políticas, sua única solução é interromper o uso do curso. Em nenhuma hipótese eu, o curso, ou seus fornecedores, seremos responsáveis ​​perante qualquer usuário ou terceiro, por quaisquer danos resultantes do uso ou incapacidade de usar este curso ou o material deste site, seja com base em garantia, contrato, delito, ou qualquer outra teoria legal, e se o site é ou não avisado da possibilidade de tais danos. Use qualquer software e técnicas descritas neste curso, em todos os momentos, "por sua conta e risco", não me responsabilizo por quaisquer perdas, danos ou responsabilidades decorrentes ou relacionadas a este curso. Em nenhum caso serei responsável por quaisquer danos indiretos, especiais, punitivos, exemplares, incidentais ou consequenciais. Esta limitação será aplicada independentemente da outra parte ter sido avisada ou não da possibilidade de tais danos.
 
-### Disclaimer
-I created this course on my own and it doesn't reflect the views of my employer, all the comments and opinions are my own.
-
-### Disclaimer of Damages
-Use of this course or material is, at all times, "at your own risk." If you are dissatisfied with any aspect of the course, any of these terms and conditions or any other policies, your only remedy is to discontinue the use of the course. In no event shall I, the course, or its suppliers, be liable to any user or third party, for any damages whatsoever resulting from the use or inability to use this course or the material upon this site, whether based on warranty, contract, tort, or any other legal theory, and whether or not the website is advised of the possibility of such damages. Use any software and techniques described in this course, at all times, "at your own risk", I'm not responsible for any losses, damages, or liabilities arising out of or related to this course. In no event will I be liable for any indirect, special, punitive, exemplary, incidental or consequential damages. this limitation will apply regardless of whether or not the other party has been advised of the possibility of such damages.
-
-### Privacy
-I'm not personally collecting any information. Since this entire course is hosted on Github, that's the [privacy policy](https://help.github.com/en/articles/github-privacy-statement) you want to read.
-
-[^1] I love the work [@prateekg147](https://twitter.com/prateekg147) did with [DIVA](http://damnvulnerableiosapp.com/) and OWASP did with [iGoat](https://www.owasp.org/index.php/OWASP_iGoat_Tool_Project). They are great tools to start learning the internals of an iOS application and some of the bugs developers have introduced in the past, but I think many of the issues shown there are just theoretical or impractical and can be compared to a "_self-hack_". It's like looking at the source code of a webpage in a web browser, you get to understand the static code (HTML/Javascript) of the website but any modifications you make won't affect other users. I wanted to show vulnerabilities that can harm the company who created the application or its end users.
+## Privacidade
+Como todo o curso está hospedado no Github, essa é a [política de privacidade](https://help.github.com/en/articles/github-privacy-statement) que você deveria ler.
