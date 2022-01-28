@@ -8,22 +8,27 @@ O curso original ainda está disponível integralmente no [Github](https://githu
 
 Todos os módulos aqui descritos foram atualizados seguindo testes realizados no iOS 14.6.
 
-* [x] Tradução para PT-BR
-* [x] Atualização dos módulos, ferramentas e conceitos
-* [ ] Uso do Theos para criação de Tweaks
-* [ ] Versão Swift
+* [x] Tradução e atualização dos Pré-requisitos   
+* [x] Tradução e atualização da Introdução  
+* [x] Tradução e atualização do Módulo 1   
+* [x] Tradução e atualização do Módulo 2  
+* [ ] Tradução e atualização do Módulo 3  
+* [ ] Tradução e atualização do Módulo 4  
+* [ ] Tradução e atualização do Módulo 5   
+* [ ] Uso do Theos para criação de Tweaks  
+* [ ] Versão Swift   
 
 ## Módulos
 
 - [Introdução](Introduction.md)
-- [[Módulo 1] Setup do Ambiente](/Module-1/README.md)
-- [[Módulo 2] Descriptografando Aplicativos iOS](/Module-2/README.md)
-- [[Módulo 3] Análise Estática](/Module-3/README.md)
-- [Module 4 - Análise Dinâmica e Hacking](/Module-4/README.md)
-- [Module 5 - Binary Patching](/Module-5/README.md)
+- [[Módulo 1] Setup do Ambiente](Module-1/README.md)
+- [[Módulo 2] Descriptografando Aplicativos iOS](Module-2/README.md)
+- [[Módulo 3] Análise Estática](Module-3/README.md)
+  - [[Módulo 3] Soluções](Module-3/Solutions.md)
+- [Module 4 - Análise Dinâmica e Hacking](Module-4/README.md)
+- [Module 5 - Binary Patching](Module-5/README.md)
 - [Pensamentos finais](Final-Thoughts.md)
 - [Recursos](Resources.md)
-
 
 ## Licença
 

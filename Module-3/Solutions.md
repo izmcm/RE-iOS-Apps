@@ -1,4 +1,4 @@
-### Module 3 - Solutions
+# [Module 3] - Solutions
 
 - `coinza-c7e97-firebase-adminsdk-ok3f8-df3457e3e8.json`: This is a configuration file for a [Firebase](https://firebase.google.com/) project and it **includes a private key** that the developers were using to connect with the Firebase backend services.
     - **The problem:** Sometimes developers don't realize that any file they embed with the app will be _easily_ extracted by anyone. In this case this configuration file gives attackers all the information they need to impersonate a legitimate access to the company's Firebase backend services and data.
