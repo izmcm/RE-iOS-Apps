@@ -10,7 +10,7 @@ Todos os módulos aqui descritos foram atualizados seguindo testes realizados no
 * [x] Tradução e atualização da Introdução  
 * [x] Tradução e atualização do Módulo 1   
 * [x] Tradução e atualização do Módulo 2  
-* [ ] Tradução e atualização do Módulo 3  
+* [x] Tradução e atualização do Módulo 3  
 * [ ] Tradução e atualização do Módulo 4  
 * [ ] Tradução e atualização do Módulo 5   
 * [ ] Uso do Theos para criação de Tweaks  
