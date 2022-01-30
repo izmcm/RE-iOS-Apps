@@ -2,9 +2,7 @@
 
 ### **Esta é uma versão traduzida e atualizada/modificada do curso de [engenharia reversa em aplicativos iOS](https://github.com/ivRodriguezCA/RE-iOS-Apps) criado originalmente por [@ivRodriguezCA](https://twitter.com/ivRodriguezCA).**
 
-A tradução do README original está disponível [aqui](README-original.md).
-
-O curso original ainda está disponível integralmente no [Github](https://github.com/ivRodriguezCA/RE-iOS-Apps). Essa versão foi traduzida do original para português brasileiro e sofreu uma série de modificações. Entre elas, a reoganização do material, a reescrita de determinadas partes para melhor clareza, a inclusão de novos tutoriais e a atualização dos assuntos e ferramentas para adequação às versões mais recentes do iOS. 
+O curso original ainda está disponível integralmente no [Github do criador](https://github.com/ivRodriguezCA/RE-iOS-Apps). Essa versão foi traduzida do original para português brasileiro e sofreu uma série de modificações. Entre elas, a reoganização do material, a reescrita de determinadas partes para melhor clareza, a inclusão de novos tutoriais e a atualização dos assuntos e ferramentas para adequação às versões mais recentes do iOS. 
 
 Todos os módulos aqui descritos foram atualizados seguindo testes realizados no iOS 14.6.
 
